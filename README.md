@@ -57,11 +57,14 @@ Optional: copy `.env.example` to `.env` and change `SCAN_INTERVAL_SECONDS`.
 1. Push this folder to GitHub.
 2. Go to [railway.app](https://railway.app) → **New Project** → **Deploy from GitHub**.
 3. Select the repo. Railway detects Python automatically.
-4. No API key needed (public Binance data).
-5. Optional variables:
-   - `SCAN_INTERVAL_SECONDS=300`
-   - `BINANCE_BASE_URL=https://api.binance.com`
-6. Deploy. Visit your app URL + `/signal` for JSON output.
+4. No API key needed — uses **Bybit public klines** (Railway-safe, not Binance SDK).
+5. Railway variables:
+   - `MARKET_DATA_PROVIDER=bybit`
+   - `SCAN_INTERVAL_SECONDS=60`
+   - `TELEGRAM_BOT_TOKEN=...` (optional)
+   - `TELEGRAM_CHAT_ID=...` (optional)
+6. **Redeploy** after push (removes old `python-binance` build).
+7. Verify: `https://YOUR-APP.up.railway.app/signal` → `"data_provider": "bybit"`
 
 ## API endpoints
 

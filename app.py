@@ -12,7 +12,9 @@ from flask import Flask, jsonify, render_template
 
 import config
 from backtest import get_backtest_stats
+from market_data import get_last_provider
 from strategy import run_analysis
+from telegram_alerts import send_telegram_alert
 
 ENGINE_VERSION = "pro-2.0"
 
@@ -69,8 +71,11 @@ def _refresh_cache() -> None:
         payload = _signal_payload(signal)
         payload["status"] = "ok"
         payload["backtest"] = get_backtest_stats(signal.price)
+        payload["data_provider"] = get_last_provider()
+        payload["candle_source"] = f"{config.SYMBOL} {config.INTERVAL} via {get_last_provider()}"
         with _cache_lock:
             _cache = payload
+        send_telegram_alert(payload)
     except Exception as exc:
         with _cache_lock:
             _cache = {
@@ -118,7 +123,16 @@ def backtest_json():
 
 @app.route("/health")
 def health():
-    return jsonify({"status": "ok", "symbol": config.SYMBOL, "engine_version": ENGINE_VERSION})
+    with _cache_lock:
+        provider = _cache.get("data_provider", get_last_provider())
+        cache_status = _cache.get("status", "unknown")
+    return jsonify({
+        "status": "ok" if cache_status == "ok" else cache_status,
+        "symbol": config.SYMBOL,
+        "engine_version": ENGINE_VERSION,
+        "data_provider": provider,
+        "market_data": "bybit (no binance sdk)",
+    })
 
 
 # Prime cache before serving requests

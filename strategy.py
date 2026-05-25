@@ -310,7 +310,7 @@ def analyze(df: pd.DataFrame) -> TradingSignal:
 
 
 def run_analysis() -> TradingSignal:
-    from binance_client import fetch_klines
+    from market_data import fetch_klines
     from indicators import enrich_dataframe
 
     df = fetch_klines()

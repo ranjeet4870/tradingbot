@@ -96,10 +96,20 @@ SIGNAL_HISTORY_FILE = os.getenv("SIGNAL_HISTORY_FILE", "data/signal_history.json
 SIGNAL_HISTORY_MAX = 20
 EVALUATION_BARS = 8
 
+# --- Market data (Railway-safe public APIs) ---
+MARKET_DATA_PROVIDER = os.getenv("MARKET_DATA_PROVIDER", "bybit")  # bybit | cryptocompare | kraken
+BYBIT_BASE_URL = os.getenv("BYBIT_BASE_URL", "https://api.bybit.com")
+BYBIT_INTERVAL = "15"  # 15m
+CRYPTOCOMPARE_OHLC_URL = "https://min-api.cryptocompare.com/data/v2/histominute"
+KRAKEN_OHLC_URL = "https://api.kraken.com/0/public/OHLC"
+KRAKEN_PAIR = "XBTUSD"
+
+# --- Telegram alerts ---
+TELEGRAM_ALERTS = os.getenv("TELEGRAM_ALERTS", "true").lower() == "true"
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
+TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "")
+
 # --- Runtime ---
 SCAN_INTERVAL_SECONDS = int(os.getenv("SCAN_INTERVAL_SECONDS", "60"))
-BINANCE_BASE_URL = os.getenv("BINANCE_BASE_URL", "https://api.binance.com")
 HOST = os.getenv("HOST", "0.0.0.0")
 PORT = int(os.getenv("PORT", "8080"))
-BINANCE_API_KEY = os.getenv("BINANCE_API_KEY", "")
-BINANCE_API_SECRET = os.getenv("BINANCE_API_SECRET", "")
